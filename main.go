@@ -22,7 +22,7 @@ func main() {
 	router := gin.Default()
 	router.GET("/links", getLinks)
 	router.GET("/:ShortnedURL", redirectToCallback)
-
+  router.PUT("/createLink", createLink)
 	router.Run("localhost:25565")
 
 }
@@ -40,4 +40,19 @@ func redirectToCallback(c *gin.Context) {
 			c.Redirect(http.StatusFound, i.CallbackURL)
 		}
 	}
+}
+
+func createLink(c *gin.Context){
+      var newLink link
+
+    // Call BindJSON to bind the received JSON to
+    // newAlbum.
+    
+    if err := c.BindJSON(&newLink); err != nil {
+        return
+    }
+
+    // Add the new album to the slice.
+    links = append(links, newLink)
+    c.IndentedJSON(http.StatusCreated, newLink)
 }
